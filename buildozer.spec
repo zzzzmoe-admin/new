@@ -6,6 +6,8 @@ source.dir = .
 source.include_exts = py
 version = 1.0
 
+android.accept_sdk_license = True
+warn_on_root = 0
 requirements = python3,kivy==2.3.0,bleak,tqdm,cython==0.29.36
 
 orientation = portrait

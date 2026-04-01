@@ -14,26 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Accept Android SDK Licenses
-        run: |
-          docker run --rm -i \
-            -v ${{ github.workspace }}:/app \
-            -w /app \
-            kivy/buildozer \
-            sh -c "yes | sdkmanager --licenses"
-
-      - name: Build with Buildozer (Docker)
-        run: |
-          docker run --rm -i \
-            -e BUILDOZER_WARN_ON_ROOT=1 \
-            -v ${{ github.workspace }}:/app \
-            -w /app \
-            kivy/buildozer \
-            -v android debug
-
-      - name: Fix Permissions
-        run: |
-          sudo chown -R $USER:$USER bin/ .buildozer/ 2>/dev/null || true
+      # 直接使用封装好的 Action，它会自动拉取环境并处理证书和权限
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

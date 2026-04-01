@@ -19,7 +19,6 @@ jobs:
           docker run --rm \
             -v ${{ github.workspace }}:/app \
             -w /app \
-            -e BUILDZER_ALWAYS_YES=1 \
             kivy/buildozer \
             sh -c "
               echo 'y' | sdkmanager --licenses > /dev/null 2>&1 || true

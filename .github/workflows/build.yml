@@ -14,14 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 修复权限问题
-      - name: Fix permissions
+      # 修复权限问题（防止 chown 报错）
+      - name: Fix workspace permissions
         run: |
           sudo chown -R $USER:$USER /github/workspace
           sudo chmod -R 777 /github/workspace
 
       - name: Build with Buildozer
-        uses: k0da/buildozer-action@main   # 切换到更稳定的 fork
+        uses: ArtemSBulgakov/buildozer-action@v1
         with:
           command: buildozer -v android debug
           buildozer_version: master

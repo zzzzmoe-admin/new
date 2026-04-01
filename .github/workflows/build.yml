@@ -24,8 +24,8 @@ jobs:
 
       - name: Build with Buildozer (Docker)
         run: |
-          printf "y\n" | docker run --rm -i \
-            -e BUILDOZER_ROOT=1 \
+          docker run --rm -i \
+            -e BUILDOZER_WARN_ON_ROOT=1 \
             -v ${{ github.workspace }}:/app \
             -w /app \
             kivy/buildozer \

@@ -13,11 +13,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build with Buildozer Action
-        uses: ArtemSBulgakov/buildozer-action@v1
-        with:
-          command: buildozer -v android debug   # 你原来的命令
-          # workdir: .                          # 如果 buildozer.spec 不在根目录才需要改
+      - name: Build TTLock APK with Buildozer (Docker)
+        run: |
+          docker run --rm \
+            --user root \
+            -v ${{ github.workspace }}:/home/user/app \
+            -w /home/user/app \
+            -e BUILDOZER_WARN_ON_ROOT=0 \
+            kivy/buildozer:latest \
+            buildozer -v android debug
+
+      # 可选：修复文件权限（防止 artifact 上传权限问题）
+      - name: Fix permissions
+        run: sudo chown -R $(whoami) bin/ .buildozer/ 2>/dev/null || true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

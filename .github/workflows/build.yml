@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
+    # 强制使用 Node.js 24，消除警告
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,7 +22,7 @@ jobs:
         uses: ArtemSBulgakov/buildozer-action@v1
         with:
           command: buildozer -v android debug
-          buildozer_version: master   # 使用最新 develop 分支，更稳定
+          buildozer_version: master
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4

@@ -10,21 +10,23 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
-    # 强制使用 Node.js 24，消除警告
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 修复权限问题
+      - name: Fix permissions
+        run: |
+          sudo chown -R $USER:$USER /github/workspace
+          sudo chmod -R 777 /github/workspace
+
       - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
+        uses: k0da/buildozer-action@main   # 切换到更稳定的 fork
         with:
           command: buildozer -v android debug
           buildozer_version: master
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ttlockroot-apk

@@ -20,8 +20,9 @@ jobs:
             -v ${{ github.workspace }}:/home/user/hostcwd \
             -w /home/user/hostcwd \
             -e BUILDOZER_WARN_ON_ROOT=0 \
+            --entrypoint sh \
             kivy/buildozer:latest \
-            sh -c "
+            -c "
               echo 'y' | sdkmanager --licenses > /dev/null 2>&1 || true
               buildozer -v android debug
             "

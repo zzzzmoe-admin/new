@@ -21,9 +21,11 @@ jobs:
             -w /home/user/hostcwd \
             -e BUILDOZER_WARN_ON_ROOT=0 \
             kivy/buildozer:latest \
-            -v android debug
+            sh -c "
+              echo 'y' | sdkmanager --licenses > /dev/null 2>&1 || true
+              buildozer -v android debug
+            "
 
-      # 修复权限，防止 artifact 上传失败
       - name: Fix permissions
         run: sudo chown -R $(whoami) bin/ .buildozer/ 2>/dev/null || true
 

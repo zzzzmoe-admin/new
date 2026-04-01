@@ -14,17 +14,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Accept Android SDK Licenses
-        run: docker run --rm -i -v ${{ github.workspace }}:/app -w /app kivy/buildozer sh -c "yes | sdkmanager --licenses"
-
       - name: Build with Buildozer (Docker)
-        run: docker run --rm -i -e BUILDOZER_ROOT=1 -v ${{ github.workspace }}:/app -w /app kivy/buildozer -v android debug
-
-      - name: Fix Permissions
-        run: sudo chown -R $USER:$USER bin/ .buildozer/ 2>/dev/null || true
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}:/app \
+            -w /app \
+            -e BUILDZER_ALWAYS_YES=1 \
+            kivy/buildozer \
+            sh -c "
+              echo 'y' | sdkmanager --licenses > /dev/null 2>&1 || true
+              yes | buildozer -v android debug
+            "
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ttlock-apk
+          name: ttlockroot-apk
           path: bin/*.apk

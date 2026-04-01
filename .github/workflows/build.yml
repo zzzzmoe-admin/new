@@ -14,21 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Accept Android SDK Licenses
+        run: docker run --rm -i -v ${{ github.workspace }}:/app -w /app kivy/buildozer sh -c "yes | sdkmanager --licenses"
+
       - name: Build with Buildozer (Docker)
-        run: |
-          # 关键点：使用 -e BUILDOZER_WARN_ON_ROOT=1 彻底禁用交互式提问
-          docker run --rm \
-            -e BUILDOZER_WARN_ON_ROOT=1 \
-            -v ${{ github.workspace }}:/app \
-            -w /app \
-            kivy/buildozer \
-            -v android debug
+        run: docker run --rm -i -e BUILDOZER_ROOT=1 -v ${{ github.workspace }}:/app -w /app kivy/buildozer -v android debug
 
       - name: Fix Permissions
-        # 必须修复权限，否则后续的 Upload 步骤可能因为没有权限进入 bin 文件夹而失败
-        if: always()
-        run: |
-          sudo chown -R $USER:$USER ${{ github.workspace }}
+        run: sudo chown -R $USER:$USER bin/ .buildozer/ 2>/dev/null || true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

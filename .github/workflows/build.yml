@@ -10,11 +10,15 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
+    env:
+      BUILDZER_ALWAYS_YES: 1          # 自动回答 root 警告
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build APK with Buildozer (Docker)
+      - name: Build with Buildozer (Docker)
         run: |
           docker run --rm \
             -v ${{ github.workspace }}:/app \

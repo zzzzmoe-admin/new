@@ -23,7 +23,10 @@ jobs:
             --entrypoint sh \
             kivy/buildozer:latest \
             -c "
-              echo 'y' | sdkmanager --licenses > /dev/null 2>&1 || true
+              echo '=== Accepting ALL SDK licenses ==='
+              yes | sdkmanager --licenses > /dev/null 2>&1 || true
+              yes | sdkmanager --licenses > /dev/null 2>&1 || true
+              yes | sdkmanager --update > /dev/null 2>&1 || true
               buildozer -v android debug
             "
 

@@ -16,7 +16,6 @@ jobs:
 
       - name: Accept Android SDK Licenses
         run: |
-          # 在挂载的卷中创建许可证目录并接受所有许可证
           docker run --rm -i \
             -v ${{ github.workspace }}:/app \
             -w /app \
@@ -25,7 +24,7 @@ jobs:
 
       - name: Build with Buildozer (Docker)
         run: |
-          echo "y" | docker run --rm -i \
+          printf "y\n" | docker run --rm -i \
             -e BUILDOZER_ROOT=1 \
             -v ${{ github.workspace }}:/app \
             -w /app \

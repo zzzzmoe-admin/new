@@ -10,10 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
-    env:
-      BUILDZER_ALWAYS_YES: 1          # 自动回答 root 警告
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,6 +17,7 @@ jobs:
       - name: Build with Buildozer (Docker)
         run: |
           docker run --rm \
+            -e BUILDOZER_ROOT=1 \
             -v ${{ github.workspace }}:/app \
             -w /app \
             kivy/buildozer \
@@ -29,5 +26,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: ttlockroot-apk
+          name: ttlock-apk
           path: bin/*.apk
